@@ -8,8 +8,19 @@ public class State : MonoBehaviour
     {
         { ChipType.JUMP, false },
         { ChipType.CLIMB, false },
-        { ChipType.CRAWL, false },
+        { ChipType.HOVER, false },
         { ChipType.FIRE, false }
+    };
+
+    private ChipType lastChip;
+
+    private Dictionary<BoxType, bool> boxes = new Dictionary<BoxType, bool>()
+    {
+        { BoxType.ONE, false },
+        { BoxType.TWO, false },
+        { BoxType.THREE, false },
+        { BoxType.FOUR, false },
+        { BoxType.FIVE, false }
     };
 
     // Start is called before the first frame update
@@ -23,22 +34,31 @@ public class State : MonoBehaviour
     {
         
     }
-
-    bool HasChip(ChipType chip)
+    public bool HasChip(ChipType chip)
     {
         return chips[key: chip];
     }
 
-    void AddChip (ChipType chip)
+    public void AddChip(ChipType chip)
     {
         chips[chip] = true;
+        lastChip = chip;
+    }
+
+    public bool HasBox(BoxType box)
+    {
+        return boxes[key: box];
+    }
+
+    public void AddBox (BoxType box)
+    {
+        boxes[box] = true;
     }
 }
 
-public enum ChipType { JUMP, CLIMB, CRAWL, FIRE  }
+public enum ChipType { JUMP, CLIMB, HOVER, FIRE  }
 
-public class Chips
-{
-    public bool jump;
+public enum BoxType { ONE, TWO, THREE, FOUR, FIVE }
 
-}
+
+

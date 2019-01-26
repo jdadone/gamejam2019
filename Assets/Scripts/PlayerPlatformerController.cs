@@ -5,13 +5,17 @@ using UnityEngine;
 public class PlayerPlatformerController : PhysicsObject {
 
     public float maxSpeed = 7;
+    public float climbSpeed = 2;
     public float jumpTakeOffSpeed = 7;
     public float climbingSpeed = 0.01f;
 
     private bool isNearWall;
     private bool isClimbing;
+    private bool isHover;
 
     private Vector2 defaultGravity;
+
+    private State state;
 
     // private SpriteRenderer spriteRenderer;
     // private Animator animator;
@@ -20,6 +24,7 @@ public class PlayerPlatformerController : PhysicsObject {
     void Awake () 
     {
         defaultGravity = Physics2D.gravity;
+        state = FindObjectOfType<State>();
         // spriteRenderer = GetComponent<SpriteRenderer> (); 
         // animator = GetComponent<Animator> ();
     }
@@ -30,7 +35,26 @@ public class PlayerPlatformerController : PhysicsObject {
 
         move.x = Input.GetAxis ("Horizontal");
 
-        if (isNearWall && !isClimbing)
+	    if(velocity.y == 0.0f && isHover)
+        {
+        	isHover = false;
+			gravityModifier = 1.0f;
+        }
+
+        if(!isHover && !isNearWall && state.HasChip(ChipType.HOVER))
+        {
+        	if(velocity.y < 0)
+        	{
+        		if(Input.GetButtonDown("Jump"))
+        		{
+        			isHover = true;
+        			gravityModifier = 0.0f;
+        			velocity.y = -1.0f;
+        		}
+        	}
+        }
+
+        if (isNearWall && !isClimbing && state.HasChip(ChipType.CLIMB) && !isHover)
         {
             if (Input.GetButtonDown("Jump"))
             {
@@ -47,7 +71,7 @@ public class PlayerPlatformerController : PhysicsObject {
                 targetVelocity.x = -5f * maxSpeed;
                 velocity.y = 5f;
             }
-        } else
+        } else if (!isHover && state.HasChip(ChipType.JUMP))
         {
             if (Input.GetButtonDown("Jump") && grounded)
             {
@@ -85,7 +109,7 @@ public class PlayerPlatformerController : PhysicsObject {
         if (isClimbing)
         {
             targetVelocity = Vector2.zero;
-            velocity.y = Input.GetAxis("Vertical");
+            velocity.y = Input.GetAxis("Vertical") * climbSpeed;
         } else
         {
             targetVelocity = move * maxSpeed;
