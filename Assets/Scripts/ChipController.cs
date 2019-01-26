@@ -7,6 +7,8 @@ public class ChipController : MonoBehaviour
     [SerializeField]
     private ChipType type;
 
+    public ChipType Type { get { return type; } }
+
     private SpriteRenderer sRenderer;
 
     private State state;
