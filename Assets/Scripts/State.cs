@@ -13,6 +13,7 @@ public class State : MonoBehaviour
     };
 
     private ChipType lastChip;
+    public ChipType LastChip { get { return lastChip; } }
 
     private Dictionary<BoxType, bool> boxes = new Dictionary<BoxType, bool>()
     {

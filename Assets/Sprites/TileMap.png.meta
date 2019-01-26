@@ -21,7 +21,7 @@ TextureImporter:
     21300032: TileMap_16
     21300034: TileMap_17
     21300036: TileMap_18
-    21300038: TileMap_19
+    21300038: Spikes_A_03
     21300040: TileMap_20
     21300042: TileMap_21
     21300044: TileMap_22
@@ -30,16 +30,16 @@ TextureImporter:
     21300050: TileMap_25
     21300052: TileMap_26
     21300054: TileMap_27
-    21300056: TileMap_28
+    21300056: Spikes_A_02
     21300058: TileMap_29
-    21300060: TileMap_30
-    21300062: TileMap_31
-    21300064: TileMap_32
-    21300066: TileMap_33
+    21300060: Platform_A
+    21300062: Spikes_B_01
+    21300064: Spikes_B_02
+    21300066: Spikes_B_03
     21300068: TileMap_34
     21300070: TileMap_35
     21300072: TileMap_36
-    21300074: TileMap_37
+    21300074: Spikes_A_01
     21300076: TileMap_38
     21300078: TileMap_39
     21300080: TileMap_40
@@ -63,8 +63,9 @@ TextureImporter:
     21300116: TileMap_58
     21300118: TileMap_59
     21300120: TileMap_60
-    21300122: TileMap_61
-    21300124: TileMap_62
+    21300122: Platform_B
+    21300124: Platform_C
+    21300126: Patform_D
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -538,15 +539,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileMap_19
+      name: Spikes_A_03
       rect:
         serializedVersion: 2
         x: 256
         y: 1232
         width: 256
         height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -718,15 +719,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileMap_28
+      name: Spikes_A_02
       rect:
         serializedVersion: 2
         x: 256
         y: 976
         width: 256
         height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -758,15 +759,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileMap_31
+      name: Spikes_B_01
       rect:
         serializedVersion: 2
         x: 1024
         y: 976
         width: 256
         height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.7}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -778,15 +779,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileMap_32
+      name: Spikes_B_02
       rect:
         serializedVersion: 2
         x: 1280
         y: 976
         width: 256
         height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.7}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -798,15 +799,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileMap_33
+      name: Spikes_B_03
       rect:
         serializedVersion: 2
         x: 1536
         y: 976
         width: 256
         height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.7}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -878,15 +879,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TileMap_37
+      name: Spikes_A_01
       rect:
         serializedVersion: 2
         x: 256
-        y: 720
+        y: 719
         width: 256
         height: 256
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1353,6 +1354,86 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1be595f5346be924da09da8e9a7806d2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Platform_A
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 50
+        width: 256
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8839081e3c5a7114f8ecbb07d876bfb5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Platform_B
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 50
+        width: 256
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d1efc7bf553b9f4c90f0d7a9c4fe101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Platform_C
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 50
+        width: 254
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20239da6696aa6744956a9649aa1507f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Patform_D
+      rect:
+        serializedVersion: 2
+        x: 253
+        y: 45
+        width: 258
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3cae0ab7c9a6544db9e465b9fa8b756
       vertices: []
       indices: 
       edges: []

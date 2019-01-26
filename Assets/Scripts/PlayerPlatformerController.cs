@@ -20,6 +20,14 @@ public class PlayerPlatformerController : PhysicsObject {
 
     private Animator animator;
 
+    private PlayerCollisionSide backCollision;
+
+    private PlayerCollisionSide frontCollision;
+
+    private GameObject sprite;
+    private Quaternion rotation;
+    private float rotationStart;
+
     // private SpriteRenderer spriteRenderer;
     // private Animator animator;
 
@@ -29,6 +37,10 @@ public class PlayerPlatformerController : PhysicsObject {
         defaultGravity = Physics2D.gravity;
         state = FindObjectOfType<State>();
         animator = GetComponent<Animator>();
+        sprite = transform.Find("Sprite").gameObject;
+
+        backCollision = transform.Find("BackCollider").GetComponent<PlayerCollisionSide>();
+        frontCollision = transform.Find("FrontCollider").GetComponent<PlayerCollisionSide>();
         // spriteRenderer = GetComponent<SpriteRenderer> (); 
         // animator = GetComponent<Animator> ();
     }
@@ -69,8 +81,9 @@ public class PlayerPlatformerController : PhysicsObject {
 
         if (isNearWall && !isClimbing && state.HasChip(ChipType.CLIMB) && !isHover)
         {
-            if (Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Jump") && (frontCollision.isHittingWall || backCollision.isHittingWall))
             {
+                sprite.transform.localRotation = Quaternion.Euler(0, 0, frontCollision.isHittingWall ? 90 : -90);
                 isClimbing = true;
                 Physics2D.gravity = Vector2.zero;
                 velocity.y = 0;
@@ -80,6 +93,7 @@ public class PlayerPlatformerController : PhysicsObject {
             if (Input.GetButtonDown("Jump"))
             {
                 isClimbing = false;
+                sprite.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 Physics2D.gravity = defaultGravity;
                 targetVelocity.x = -5f * maxSpeed;
                 velocity.y = 5f;
@@ -89,6 +103,7 @@ public class PlayerPlatformerController : PhysicsObject {
             if (Input.GetButtonDown("Jump") && grounded)
             {
                 velocity.y = jumpTakeOffSpeed;
+                // animator.SetBool("jump", true);
             }
             else if (Input.GetButtonUp("Jump"))
             {
@@ -99,8 +114,8 @@ public class PlayerPlatformerController : PhysicsObject {
             }
         }
 
-        Debug.Log(Mathf.Abs(velocity.x) / maxSpeed);
-        animator.SetFloat("walkingSpeed", Mathf.Abs(velocity.x) / maxSpeed);
+        // Debug.Log(Mathf.Abs(velocity.x) / maxSpeed);
+        animator.SetFloat("walkingSpeed", isClimbing ? Mathf.Abs(velocity.y) : Mathf.Abs(velocity.x) / maxSpeed);
 
         /*
         if(move.x > 0.01f)
@@ -137,6 +152,13 @@ public class PlayerPlatformerController : PhysicsObject {
         if (collision.gameObject.tag == "Wall")
         {
             isNearWall = true;
+        } else if (collision.gameObject.tag == "Deadly")
+        {
+            var allChips = FindObjectsOfType<ChipController>();
+            foreach (var chip in allChips)
+            {
+                if (chip.Type == state.LastChip) { transform.position = chip.transform.position; }
+            }
         }
     }
 
@@ -145,8 +167,8 @@ public class PlayerPlatformerController : PhysicsObject {
         if (collision.gameObject.tag == "Wall")
         {
             isNearWall = false;
-
             isClimbing = false;
+            sprite.transform.localRotation = Quaternion.Euler(0, 0, 0);
             Physics2D.gravity = defaultGravity;
         }
 
@@ -160,10 +182,12 @@ public class PlayerPlatformerController : PhysicsObject {
     {
         if(collision.gameObject.tag=="BreakableWall")
         {
+
             isNearBreakableWall = true;
             if (Input.GetButtonDown("Jump") && state.HasChip(ChipType.FIRE))
             {
                 collision.gameObject.GetComponent<BreakableWallController>().BreakWall();
+                isNearBreakableWall = false;
             }
             
         }
