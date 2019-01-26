@@ -12,10 +12,13 @@ public class PlayerPlatformerController : PhysicsObject {
     private bool isNearWall;
     private bool isClimbing;
     private bool isHover;
+    private bool isNearBreakableWall;
 
     private Vector2 defaultGravity;
 
     private State state;
+
+    private Animator animator;
 
     // private SpriteRenderer spriteRenderer;
     // private Animator animator;
@@ -25,6 +28,7 @@ public class PlayerPlatformerController : PhysicsObject {
     {
         defaultGravity = Physics2D.gravity;
         state = FindObjectOfType<State>();
+        animator = GetComponent<Animator>();
         // spriteRenderer = GetComponent<SpriteRenderer> (); 
         // animator = GetComponent<Animator> ();
     }
@@ -34,6 +38,8 @@ public class PlayerPlatformerController : PhysicsObject {
         Vector2 move = Vector2.zero;
 
         move.x = Input.GetAxis ("Horizontal");
+
+        animator.SetBool("isIddle", velocity == Vector2.zero);
 
 	    if(velocity.y == 0.0f && isHover)
         {
@@ -52,6 +58,13 @@ public class PlayerPlatformerController : PhysicsObject {
         			velocity.y = -1.0f;
         		}
         	}
+        } else if (isHover)
+        {
+            if (Input.GetButtonDown("Jump"))
+            {
+                isHover = false;
+                gravityModifier = 1.0f;
+            }
         }
 
         if (isNearWall && !isClimbing && state.HasChip(ChipType.CLIMB) && !isHover)
@@ -71,7 +84,7 @@ public class PlayerPlatformerController : PhysicsObject {
                 targetVelocity.x = -5f * maxSpeed;
                 velocity.y = 5f;
             }
-        } else if (!isHover && state.HasChip(ChipType.JUMP))
+        } else if (!isHover && state.HasChip(ChipType.JUMP) && !isNearBreakableWall)
         {
             if (Input.GetButtonDown("Jump") && grounded)
             {
@@ -85,6 +98,9 @@ public class PlayerPlatformerController : PhysicsObject {
                 }
             }
         }
+
+        Debug.Log(Mathf.Abs(velocity.x) / maxSpeed);
+        animator.SetFloat("walkingSpeed", Mathf.Abs(velocity.x) / maxSpeed);
 
         /*
         if(move.x > 0.01f)
@@ -133,5 +149,24 @@ public class PlayerPlatformerController : PhysicsObject {
             isClimbing = false;
             Physics2D.gravity = defaultGravity;
         }
+
+        if (collision.gameObject.tag == "BreakableWall")
+        {
+            isNearBreakableWall = false;
+        }
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag=="BreakableWall")
+        {
+            isNearBreakableWall = true;
+            if (Input.GetButtonDown("Jump") && state.HasChip(ChipType.FIRE))
+            {
+                collision.gameObject.GetComponent<BreakableWallController>().BreakWall();
+            }
+            
+        }
+    }
+
 }
