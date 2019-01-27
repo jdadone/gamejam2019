@@ -15,14 +15,17 @@ public class SpacemenController : MonoBehaviour
 	private int numberOfDeaths;
     public string NumberOfNotDeaths { get { return (5 - numberOfDeaths).ToString() + "/5"; } }
 
-    public void Show ()
+    private void Start()
     {
         foreach (var astronaut in astronauts)
         {
             var renderer = astronaut.transform.GetComponent<SpriteRenderer>();
             renderer.color = new Color(1, 1, 1, 0);
         }
+    }
 
+    public void Show ()
+    {
         timeSpend = PlayerPrefs.GetFloat("TimeSpend");
 
         Random.InitState(System.DateTime.Now.Second);

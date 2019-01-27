@@ -67,8 +67,8 @@ public class EndLevel : MonoBehaviour
         yield return AddBox(2);
         yield return AddBox(3);
         yield return AddBox(4);
-        ShowStats();
         spacemen.Show();
+        ShowStats();
     }
 
     IEnumerator AddBox (int i)
