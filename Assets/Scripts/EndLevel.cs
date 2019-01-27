@@ -44,15 +44,18 @@ public class EndLevel : MonoBehaviour
 
     
 
-    private void GoFinalScene ()
+    public void Restart ()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(1);
     }
 
     void ShowStats ()
     {
         Text textUI = canvas.GetComponentInChildren<Text>();
-        textUI.text = "Chips\n" + state.GetChipsCount() + "\n\n";
+        var time = Time.time;
+        var min = (int)time / 60;
+        var seg = (int)time - (min * 60);
+        textUI.text = "Cajas\n" + state.GetBoxCount() + "\n\nTiempo\n" + min.ToString() + ":" + (seg < 10 ? "0" : "") + seg.ToString() + "\n\nSobrevivientes\n" + spacemen.NumberOfNotDeaths;
         canvas.gameObject.SetActive(true);
     }
 

@@ -19,13 +19,14 @@ public class State : MonoBehaviour
     public float JetPackEnergy { get { return jetPackEnergy; } }
     bool JetPackActive = false;
     float JetPackChangeTime;
+    public bool paused;
 
     private Dictionary<BoxType, bool> boxes = new Dictionary<BoxType, bool>()
     {
-        { BoxType.ONE, true },
-        { BoxType.TWO, true },
+        { BoxType.ONE, false },
+        { BoxType.TWO, false },
         { BoxType.THREE, false },
-        { BoxType.FOUR, true },
+        { BoxType.FOUR, false },
         { BoxType.FIVE, false }
     };
 

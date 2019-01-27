@@ -103,12 +103,7 @@ public class PlayerPlatformerController : PhysicsObject {
     		return;
     	}
 
-    	if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-
-        if (isDead || isDrilling) return;
+        if (isDead || isDrilling || state.paused) return;
 
         if(Time.time >= 91 && playingMusic == 0)
         {

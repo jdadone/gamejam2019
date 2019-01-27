@@ -29,14 +29,18 @@ public class ChipController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Camera cam = Camera.main;
+        newbiesRender.transform.position = cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth / 2, cam.pixelHeight / 2, cam.nearClipPlane));
+
         if (state.HasChip(type) && !newbiesRender.enabled)
         {
             transform.localScale = Vector3.zero;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && newbiesRender.enabled)
+        if(Input.GetKeyDown(KeyCode.Escape) && newbiesRender.enabled)
         {
             newbiesRender.enabled = false;
+            state.paused = false;
         }
 
     }
@@ -45,7 +49,9 @@ public class ChipController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" && !state.HasChip(type))
         {
+            collision.transform.position = transform.position;
             newbiesRender.enabled = true;
+            state.paused = true;
             PlayGrabSound();
             state.AddChip(type, transform.position);
         }

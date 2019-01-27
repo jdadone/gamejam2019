@@ -8,6 +8,7 @@ TagManager:
   - BreakableWall
   - Deadly
   - EndLevel
+  - Chip
   layers:
   - Default
   - TransparentFX

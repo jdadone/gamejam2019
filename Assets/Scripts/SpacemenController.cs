@@ -13,6 +13,7 @@ public class SpacemenController : MonoBehaviour
 	public GameObject[] astronauts;
 
 	private int numberOfDeaths;
+    public string NumberOfNotDeaths { get { return (5 - numberOfDeaths).ToString() + "/5"; } }
 
     void Start()
     {
@@ -85,12 +86,6 @@ public class SpacemenController : MonoBehaviour
         	astronauts[3].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[3];
         	astronauts[4].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[4];
         }
-
-        astronauts[0].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[0];
-        astronauts[1].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[1];
-        astronauts[2].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[2];
-        astronauts[3].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[3];
-        astronauts[4].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[4];
 
         // Debug.Log("Muertos: " + numberOfDeaths + " Te tardaste: " + timeSpend + " Segundos.");
     }
