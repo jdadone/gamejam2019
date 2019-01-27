@@ -31,8 +31,7 @@ public class BoxController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" && !state.HasBox(type))
         {
-            state.AddBox(type);
-            Debug.Log(Time.time);
+            state.AddBox(type, transform.position);
         }
     }
 }
