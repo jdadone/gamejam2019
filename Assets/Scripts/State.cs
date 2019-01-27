@@ -12,8 +12,13 @@ public class State : MonoBehaviour
         { ChipType.FIRE, false }
     };
 
-    private Vector3 lastCheckpoint;
+    private Vector3 lastCheckpoint = new Vector3(-15,0,0);
     public Vector3 LastChip { get { return lastCheckpoint; } }
+
+    private float jetPackEnergy = 5;
+    public float JetPackEnergy { get { return jetPackEnergy; } }
+    bool JetPackActive = false;
+    float JetPackChangeTime;
 
     private Dictionary<BoxType, bool> boxes = new Dictionary<BoxType, bool>()
     {
@@ -24,6 +29,8 @@ public class State : MonoBehaviour
         { BoxType.FIVE, false }
     };
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +40,27 @@ public class State : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        var elapsedTime = Time.time - JetPackChangeTime;
+        if (JetPackActive)
+        {
+            if ((elapsedTime >= 1) && JetPackEnergy > 0) {
+                JetPackChangeTime = Time.time;
+                jetPackEnergy--;
+            }
+        } else
+        {
+            if ((elapsedTime >= .5f) && JetPackEnergy < 5)
+            {
+                JetPackChangeTime = Time.time;
+                jetPackEnergy++;
+            }
+        }
+    }
+
+    public void ChangeJetPackStatus(bool active)
+    {
+        JetPackActive = active;
+        JetPackChangeTime = Time.time;
     }
 
     public bool HasChip(ChipType chip)

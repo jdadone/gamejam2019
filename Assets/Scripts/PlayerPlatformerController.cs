@@ -110,19 +110,21 @@ public class PlayerPlatformerController : PhysicsObject {
 
         rockets.SetActive(isHover);
 
-	    if(velocity.y == 0.0f && isHover)
+	    if((velocity.y == 0.0f && isHover) || (isHover && state.JetPackEnergy == 0))
         {
-        	isHover = false;
+            state.ChangeJetPackStatus(false);
+            isHover = false;
 			gravityModifier = 1.0f;
         }
 
-        if(!isHover && !isNearWall && state.HasChip(ChipType.HOVER))
+        if(!isHover && !isNearWall && state.HasChip(ChipType.HOVER) && (state.JetPackEnergy > 0))
         {
         	if(velocity.y < 0)
         	{
         		if(Input.GetButtonDown("Jump"))
         		{
         			isHover = true;
+                    state.ChangeJetPackStatus(true);
         			gravityModifier = 0.0f;
         			velocity.y = -1.0f;
         		}
@@ -132,6 +134,7 @@ public class PlayerPlatformerController : PhysicsObject {
             if (Input.GetButtonDown("Jump"))
             {
                 isHover = false;
+                state.ChangeJetPackStatus(false);
                 gravityModifier = 1.0f;
             }
         }
