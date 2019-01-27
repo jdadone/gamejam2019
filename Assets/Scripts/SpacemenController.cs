@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FinalScene : MonoBehaviour
+public class SpacemenController : MonoBehaviour
 {
 
 	private float timeSpend;
@@ -16,6 +16,12 @@ public class FinalScene : MonoBehaviour
 
     void Start()
     {
+        foreach (var astronaut in astronauts)
+        {
+            var renderer = astronaut.transform.GetComponent<SpriteRenderer>();
+            renderer.color = new Color(1, 1, 1, 0);
+        }
+
         timeSpend = PlayerPrefs.GetFloat("TimeSpend");
 
         Random.InitState(System.DateTime.Now.Second);
@@ -79,16 +85,35 @@ public class FinalScene : MonoBehaviour
         	astronauts[3].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[3];
         	astronauts[4].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[4];
         }
-        
-        Debug.Log("Muertos: " + numberOfDeaths + " Te tardaste: " + timeSpend + " Segundos.");
 
+        astronauts[0].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[0];
+        astronauts[1].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[1];
+        astronauts[2].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[2];
+        astronauts[3].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[3];
+        astronauts[4].transform.GetComponent<SpriteRenderer>().sprite = deadSprites[4];
+
+        // Debug.Log("Muertos: " + numberOfDeaths + " Te tardaste: " + timeSpend + " Segundos.");
     }
 
-    void Update()
+    public void Show ()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        StartCoroutine(ShowAnimation());
+    }
+
+    IEnumerator ShowAnimation ()
+    {
+        int index = 0;
+        foreach (var astronaut in astronauts)
         {
-            SceneManager.LoadScene(0);
+            var renderer = astronaut.transform.GetComponent<SpriteRenderer>();
+            var maxAlpha = (renderer.sprite == deadSprites[index]) ? .5f : 1;
+            while (renderer.color.a < maxAlpha)
+            {
+                var a = renderer.color.a;
+                renderer.color = new Color(1, 1, 1, a + 0.1f);
+                yield return new WaitForFixedUpdate();
+            }
+            index++;
         }
     }
 }

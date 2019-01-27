@@ -22,13 +22,12 @@ public class State : MonoBehaviour
 
     private Dictionary<BoxType, bool> boxes = new Dictionary<BoxType, bool>()
     {
-        { BoxType.ONE, false },
-        { BoxType.TWO, false },
+        { BoxType.ONE, true },
+        { BoxType.TWO, true },
         { BoxType.THREE, false },
-        { BoxType.FOUR, false },
+        { BoxType.FOUR, true },
         { BoxType.FIVE, false }
     };
-
 
 
     // Start is called before the first frame update
@@ -65,7 +64,6 @@ public class State : MonoBehaviour
 
     public bool HasChip(ChipType chip)
     {
-        //return true;
         return chips[key: chip];
     }
 
@@ -73,6 +71,18 @@ public class State : MonoBehaviour
     {
         chips[chip] = true;
         lastCheckpoint = position;
+    }
+
+    public string GetChipsCount()
+    {
+        int i = 0;
+        int c = 0;
+        foreach (var b in chips)
+        {
+            if (b.Value) c++;
+            i++;
+        }
+        return c.ToString() + "/" + i.ToString();
     }
 
     public bool HasBox(BoxType box)
@@ -84,6 +94,18 @@ public class State : MonoBehaviour
     {
         boxes[box] = true;
         lastCheckpoint = position;
+    }
+
+    public string GetBoxCount ()
+    {
+        int i = 0;
+        int c = 0;
+        foreach (var b in boxes)
+        {
+            if (b.Value) c++;
+            i++;
+        }
+        return c.ToString() + "/" + i.ToString();
     }
 }
 

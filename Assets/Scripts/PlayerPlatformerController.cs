@@ -276,8 +276,11 @@ public class PlayerPlatformerController : PhysicsObject {
         }
         else if(collision.gameObject.tag == "EndLevel")
         {
-        	PlayerPrefs.SetFloat("TimeSpend", Time.time);
-        	EndLevel();
+        	isPaused = true;
+            velocity = Vector2.zero;
+            transform.Find("Main Camera").GetComponent<Animator>().SetBool("endAnimation", true);
+            animator.SetBool("isIddle", true);
+            animator.SetBool("endAnimation", true);
         }
     }
 
@@ -414,48 +417,6 @@ public class PlayerPlatformerController : PhysicsObject {
     private void StopDrillSound()
     {
 		drillAudioSource.Stop();
-    }
-
-    private void EndLevel()
-    {
-    	isPaused = true;
-
-		StartCoroutine(AddBoxes());
-    	
-    }
-
-    private void GoFinalScene ()
-    {
-        SceneManager.LoadScene(2);
-    }
-
-    IEnumerator AddBoxes ()
-    {
-    	if(state.HasBox(BoxType.ONE))
-    	{
-	        yield return new WaitForSeconds(5);
-	    }
-
-	    if(state.HasBox(BoxType.TWO))
-    	{
-	        yield return new WaitForSeconds(5);
-	    }
-
-	    if(state.HasBox(BoxType.THREE))
-    	{
-	        yield return new WaitForSeconds(5);
-	    }
-
-	    if(state.HasBox(BoxType.FOUR))
-    	{
-	        yield return new WaitForSeconds(5);
-	    }
-
-	    if(state.HasBox(BoxType.FIVE))
-    	{
-	        yield return new WaitForSeconds(5);
-	    }
-   		GoFinalScene();
     }
     
 }
