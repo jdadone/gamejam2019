@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -118000,6 +118000,15 @@ MonoBehaviour:
   climbSpeed: 2
   jumpTakeOffSpeed: 7
   climbingSpeed: 0.01
+  soundList:
+  - {fileID: 0}
+  - {fileID: 8300000, guid: 961f1613b9906294d9af674ab89c1180, type: 3}
+  - {fileID: 8300000, guid: 560c847894cffa9448094e4f65a1e405, type: 3}
+  - {fileID: 8300000, guid: a00b5727604b8444394688d8d9739692, type: 3}
+  musicObject: {fileID: 784251698}
+  walkSoundObject: {fileID: 649631180}
+  jumpSoundObject: {fileID: 1016912875}
+  fallSoundObject: {fileID: 969830865}
 --- !u!1001 &1998874675
 PrefabInstance:
   m_ObjectHideFlags: 0
