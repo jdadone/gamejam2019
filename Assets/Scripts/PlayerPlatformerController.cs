@@ -33,6 +33,7 @@ public class PlayerPlatformerController : PhysicsObject {
 
     public GameObject musicObject;
     private AudioSource musicSource;
+    private int playingMusic;
 
     public GameObject walkSoundObject;
     private AudioSource walkAudioSource;
@@ -40,6 +41,7 @@ public class PlayerPlatformerController : PhysicsObject {
 
     public GameObject jumpSoundObject;
     private AudioSource jumpAudioSource;
+    private bool isJumping;
 
     public GameObject fallSoundObject;
     private AudioSource fallAudioSource;
@@ -68,19 +70,37 @@ public class PlayerPlatformerController : PhysicsObject {
 
         // spriteRenderer = GetComponent<SpriteRenderer> (); 
         // animator = GetComponent<Animator> ();
+        playingMusic = 0;
+        musicSource.volume = 0.3f;
+        musicSource.clip = soundList[3];
         PlayMusic();
-    }
-
-    protected override void PlayFallSound()
-    {
-    	fallAudioSource.clip = soundList[3];
-		fallAudioSource.Play();
     }
 
     protected override void ComputeVelocity()
     {
         if (isDead) return;
 
+        if(Time.time >= 91 && playingMusic == 0)
+        {
+        	playingMusic = 1;
+        	StopMusic();
+        	musicSource.clip = soundList[4];
+        	PlayMusic();
+        }
+
+        if(Time.time > 131 && playingMusic == 1)
+        {
+			playingMusic = 2;
+        	StopMusic();
+        	musicSource.clip = soundList[5];
+        	PlayMusic();
+        }
+
+        if(isJumping && grounded)
+        {
+        	PlayFallSound();
+        	isJumping = false;
+        }
         Vector2 move = Vector2.zero;
 
         move.x = Input.GetAxis ("Horizontal");
@@ -140,6 +160,7 @@ public class PlayerPlatformerController : PhysicsObject {
             {
                 velocity.y = jumpTakeOffSpeed;
                 PlayJumpSound();
+                isJumping = true;
                 // animator.SetBool("jump", true);
             }
             else if (Input.GetButtonUp("Jump"))
@@ -249,7 +270,6 @@ public class PlayerPlatformerController : PhysicsObject {
 
 	private void PlayMusic()
     {
-    	musicSource.clip = soundList[0];
 		musicSource.Play();
     }
 
@@ -263,7 +283,7 @@ public class PlayerPlatformerController : PhysicsObject {
     	if(!isWalking)
     	{
     		isWalking = true;
-    		walkAudioSource.clip = soundList[1];
+    		walkAudioSource.clip = soundList[0];
 			walkAudioSource.Play();
     	}
     }
@@ -276,7 +296,13 @@ public class PlayerPlatformerController : PhysicsObject {
 
 	private void PlayJumpSound()
     {
-    	jumpAudioSource.clip = soundList[2];
+    	jumpAudioSource.clip = soundList[1];
 		jumpAudioSource.Play();
+    }
+
+    private void PlayFallSound()
+    {
+    	fallAudioSource.clip = soundList[2];
+		fallAudioSource.Play();
     }
 }

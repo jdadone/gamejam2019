@@ -16,8 +16,6 @@ public class PhysicsObject : MonoBehaviour {
     protected RaycastHit2D[] hitBuffer = new RaycastHit2D[16];
     protected List<RaycastHit2D> hitBufferList = new List<RaycastHit2D> (16);
 
-    private bool wasGrounded;
-
     protected const float minMoveDistance = 0.001f;
     protected const float shellRadius = 0.01f;
 
@@ -54,11 +52,6 @@ public class PhysicsObject : MonoBehaviour {
         velocity += gravityModifier * Physics2D.gravity * Time.deltaTime;
         velocity.x = targetVelocity.x;
 
-        if(!wasGrounded && grounded)
-        {
-            PlayFallSound();
-        }
-
         grounded = false;
 
         Vector2 deltaPosition = velocity * Time.deltaTime;
@@ -73,7 +66,6 @@ public class PhysicsObject : MonoBehaviour {
 
         Movement (move, true);
 
-        wasGrounded = grounded;
     }
 
     void Movement(Vector2 move, bool yMovement)

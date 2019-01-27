@@ -118001,10 +118001,12 @@ MonoBehaviour:
   jumpTakeOffSpeed: 7
   climbingSpeed: 0.01
   soundList:
-  - {fileID: 0}
   - {fileID: 8300000, guid: 961f1613b9906294d9af674ab89c1180, type: 3}
   - {fileID: 8300000, guid: 560c847894cffa9448094e4f65a1e405, type: 3}
   - {fileID: 8300000, guid: a00b5727604b8444394688d8d9739692, type: 3}
+  - {fileID: 8300000, guid: 94b6bfad2c9c9454b8ff512dae5dfafa, type: 3}
+  - {fileID: 8300000, guid: 545fb04c52973ca41a100a7d8fddd887, type: 3}
+  - {fileID: 8300000, guid: d4530a4c812898e42bdf5fe2c6ffb4d2, type: 3}
   musicObject: {fileID: 784251698}
   walkSoundObject: {fileID: 649631180}
   jumpSoundObject: {fileID: 1016912875}
