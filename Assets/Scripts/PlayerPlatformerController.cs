@@ -14,6 +14,7 @@ public class PlayerPlatformerController : PhysicsObject {
     private bool isHover;
     private bool isNearBreakableWall;
     private bool isDead;
+    private bool isDrilling;
 
     private Vector2 defaultGravity;
 
@@ -79,7 +80,7 @@ public class PlayerPlatformerController : PhysicsObject {
 
     protected override void ComputeVelocity()
     {
-        if (isDead) return;
+        if (isDead || isDrilling) return;
 
         Vector2 move = Vector2.zero;
 
@@ -240,11 +241,23 @@ public class PlayerPlatformerController : PhysicsObject {
             isNearBreakableWall = true;
             if (Input.GetButtonDown("Jump") && state.HasChip(ChipType.FIRE))
             {
+                velocity = Vector2.zero;
                 collision.gameObject.GetComponent<BreakableWallController>().BreakWall();
-                isNearBreakableWall = false;
+                isDrilling = true;
+                animator.SetBool("isIddle", false);
+                animator.SetBool("isDrilling", true);
+                StopWalkSound();
             }
             
         }
+    }
+
+    void EndDrill ()
+    {
+        isDrilling = false;
+        animator.SetBool("isDrilling", false);
+        isNearBreakableWall = false;
+
     }
 
 	private void PlayMusic()

@@ -38,6 +38,7 @@ public class State : MonoBehaviour
 
     public bool HasChip(ChipType chip)
     {
+        return true;
         return chips[key: chip];
     }
 
