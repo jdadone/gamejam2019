@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerPlatformerController : PhysicsObject {
 
@@ -46,14 +47,28 @@ public class PlayerPlatformerController : PhysicsObject {
 
     public GameObject fallSoundObject;
     private AudioSource fallAudioSource;
+
+    public GameObject deadSoundObject;
+    private AudioSource deadAudioSource;
     
+    public GameObject jetpackSoundObject;
+    private AudioSource jetpackAudioSource;
+
+    public GameObject climbSoundObject;
+    private AudioSource climbAudioSource;
+	private bool isClimbingSound;
+
+	public GameObject drillSoundObject;
+    private AudioSource drillAudioSource;
+
     private GameObject rockets;
+    private bool isPaused;
 
     // private SpriteRenderer spriteRenderer;
     // private Animator animator;
 
     // Use this for initialization
-    void Awake () 
+    void Awake ()
     {
         defaultGravity = Physics2D.gravity;
         state = FindObjectOfType<State>();
@@ -68,6 +83,10 @@ public class PlayerPlatformerController : PhysicsObject {
         walkAudioSource = walkSoundObject.transform.GetComponent<AudioSource>();
         jumpAudioSource = jumpSoundObject.transform.GetComponent<AudioSource>();
         fallAudioSource = fallSoundObject.transform.GetComponent<AudioSource>();
+        deadAudioSource = deadSoundObject.transform.GetComponent<AudioSource>();
+        jetpackAudioSource = jetpackSoundObject.transform.GetComponent<AudioSource>();
+        climbAudioSource = climbSoundObject.transform.GetComponent<AudioSource>();
+        drillAudioSource = drillSoundObject.transform.GetComponent<AudioSource>();
 
         // spriteRenderer = GetComponent<SpriteRenderer> (); 
         // animator = GetComponent<Animator> ();
@@ -79,6 +98,16 @@ public class PlayerPlatformerController : PhysicsObject {
 
     protected override void ComputeVelocity()
     {
+    	if(isPaused)
+    	{
+    		return;
+    	}
+
+    	if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         if (isDead || isDrilling) return;
 
         if(Time.time >= 91 && playingMusic == 0)
@@ -99,7 +128,7 @@ public class PlayerPlatformerController : PhysicsObject {
 
         if(isJumping && grounded)
         {
-        	PlayFallSound();
+        	PlayFallingSound();
         	isJumping = false;
         }
         Vector2 move = Vector2.zero;
@@ -113,6 +142,7 @@ public class PlayerPlatformerController : PhysicsObject {
 	    if((velocity.y == 0.0f && isHover) || (isHover && state.JetPackEnergy == 0))
         {
             state.ChangeJetPackStatus(false);
+            StopJetpackSound();
             isHover = false;
 			gravityModifier = 1.0f;
         }
@@ -123,6 +153,7 @@ public class PlayerPlatformerController : PhysicsObject {
         	{
         		if(Input.GetButtonDown("Jump"))
         		{
+        			PlayJetpackSound();
         			isHover = true;
                     state.ChangeJetPackStatus(true);
         			gravityModifier = 0.0f;
@@ -133,6 +164,7 @@ public class PlayerPlatformerController : PhysicsObject {
         {
             if (Input.GetButtonDown("Jump"))
             {
+            	StopJetpackSound();
                 isHover = false;
                 state.ChangeJetPackStatus(false);
                 gravityModifier = 1.0f;
@@ -208,6 +240,18 @@ public class PlayerPlatformerController : PhysicsObject {
     		StopWalkSound();
     	}
 
+    	if(isClimbing)
+    	{
+    		if(!isClimbingSound)
+    		{
+    			PlayClimbSound();
+    		}
+    	}
+    	else if(!isClimbing && isClimbingSound)
+    	{
+    		StopClimbSound();
+    	}
+
         if (isClimbing)
         {
             targetVelocity = Vector2.zero;
@@ -221,6 +265,7 @@ public class PlayerPlatformerController : PhysicsObject {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+
         if (collision.gameObject.tag == "Wall")
         {
             isNearWall = true;
@@ -229,10 +274,16 @@ public class PlayerPlatformerController : PhysicsObject {
             var allChips = FindObjectsOfType<ChipController>();
             StartCoroutine(Die());
         }
+        else if(collision.gameObject.tag == "EndLevel")
+        {
+        	PlayerPrefs.SetFloat("TimeSpend", Time.time);
+        	EndLevel();
+        }
     }
 
     IEnumerator Die ()
     {
+    	PlayDeadSound();
         isDead = true;
         animator.SetBool("isDead", true);
         yield return new WaitForSeconds(1);
@@ -263,11 +314,12 @@ public class PlayerPlatformerController : PhysicsObject {
         {
 
             isNearBreakableWall = true;
-            if (Input.GetButtonDown("Jump") && state.HasChip(ChipType.FIRE))
+            if (Input.GetButtonDown("Jump") && state.HasChip(ChipType.FIRE) && !isDrilling)
             {
                 velocity = Vector2.zero;
                 collision.gameObject.GetComponent<BreakableWallController>().BreakWall();
                 isDrilling = true;
+                PlayDrillSound();
                 animator.SetBool("isIddle", false);
                 animator.SetBool("isDrilling", true);
                 StopWalkSound();
@@ -279,6 +331,7 @@ public class PlayerPlatformerController : PhysicsObject {
     void EndDrill ()
     {
         isDrilling = false;
+        StopDrillSound();
         animator.SetBool("isDrilling", false);
         isNearBreakableWall = false;
 
@@ -316,9 +369,93 @@ public class PlayerPlatformerController : PhysicsObject {
 		jumpAudioSource.Play();
     }
 
-    private void PlayFallSound()
+    private void PlayFallingSound()
     {
     	fallAudioSource.clip = soundList[2];
 		fallAudioSource.Play();
     }
+
+    private void PlayDeadSound()
+    {
+    	fallAudioSource.clip = soundList[6];
+		fallAudioSource.Play();
+    }
+
+    private void PlayJetpackSound()
+    {
+    	jetpackAudioSource.clip = soundList[7];
+		jetpackAudioSource.Play();
+    }
+
+    private void StopJetpackSound()
+    {
+		jetpackAudioSource.Stop();
+    }
+
+    private void PlayClimbSound()
+    {
+    	climbAudioSource.clip = soundList[8];
+		climbAudioSource.Play();
+		isClimbingSound = true;
+    }
+
+    private void StopClimbSound()
+    {
+		climbAudioSource.Stop();
+		isClimbingSound = false;
+    }
+
+    private void PlayDrillSound()
+    {
+    	drillAudioSource.clip = soundList[9];
+		drillAudioSource.Play();
+    }
+
+    private void StopDrillSound()
+    {
+		drillAudioSource.Stop();
+    }
+
+    private void EndLevel()
+    {
+    	isPaused = true;
+
+		StartCoroutine(AddBoxes());
+    	
+    }
+
+    private void GoFinalScene ()
+    {
+        SceneManager.LoadScene(2);
+    }
+
+    IEnumerator AddBoxes ()
+    {
+    	if(state.HasBox(BoxType.ONE))
+    	{
+	        yield return new WaitForSeconds(5);
+	    }
+
+	    if(state.HasBox(BoxType.TWO))
+    	{
+	        yield return new WaitForSeconds(5);
+	    }
+
+	    if(state.HasBox(BoxType.THREE))
+    	{
+	        yield return new WaitForSeconds(5);
+	    }
+
+	    if(state.HasBox(BoxType.FOUR))
+    	{
+	        yield return new WaitForSeconds(5);
+	    }
+
+	    if(state.HasBox(BoxType.FIVE))
+    	{
+	        yield return new WaitForSeconds(5);
+	    }
+   		GoFinalScene();
+    }
+    
 }

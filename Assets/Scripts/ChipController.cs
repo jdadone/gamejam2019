@@ -13,7 +13,7 @@ public class ChipController : MonoBehaviour
 
     private State state;
     public GameObject newbiesTutorials;
-    public SpriteRenderer newbiesRender;
+    private SpriteRenderer newbiesRender;
 
     private AudioSource grabSource;
 
@@ -34,7 +34,7 @@ public class ChipController : MonoBehaviour
             transform.localScale = Vector3.zero;
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape) && newbiesRender.enabled)
+        if(Input.GetKeyDown(KeyCode.Space) && newbiesRender.enabled)
         {
             newbiesRender.enabled = false;
         }
