@@ -12,8 +12,8 @@ public class State : MonoBehaviour
         { ChipType.FIRE, false }
     };
 
-    private ChipType lastChip;
-    public ChipType LastChip { get { return lastChip; } }
+    private Vector3 lastCheckpoint;
+    public Vector3 LastChip { get { return lastCheckpoint; } }
 
     private Dictionary<BoxType, bool> boxes = new Dictionary<BoxType, bool>()
     {
@@ -35,15 +35,16 @@ public class State : MonoBehaviour
     {
         
     }
+
     public bool HasChip(ChipType chip)
     {
         return chips[key: chip];
     }
 
-    public void AddChip(ChipType chip)
+    public void AddChip(ChipType chip, Vector3 position)
     {
         chips[chip] = true;
-        lastChip = chip;
+        lastCheckpoint = position;
     }
 
     public bool HasBox(BoxType box)
@@ -51,9 +52,10 @@ public class State : MonoBehaviour
         return boxes[key: box];
     }
 
-    public void AddBox (BoxType box)
+    public void AddBox (BoxType box, Vector3 position)
     {
         boxes[box] = true;
+        lastCheckpoint = position;
     }
 }
 

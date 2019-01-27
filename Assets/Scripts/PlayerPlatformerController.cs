@@ -13,6 +13,7 @@ public class PlayerPlatformerController : PhysicsObject {
     private bool isClimbing;
     private bool isHover;
     private bool isNearBreakableWall;
+    private bool isDead;
 
     private Vector2 defaultGravity;
 
@@ -28,6 +29,8 @@ public class PlayerPlatformerController : PhysicsObject {
     private Quaternion rotation;
     private float rotationStart;
 
+    private GameObject rockets;
+
     // private SpriteRenderer spriteRenderer;
     // private Animator animator;
 
@@ -38,6 +41,7 @@ public class PlayerPlatformerController : PhysicsObject {
         state = FindObjectOfType<State>();
         animator = GetComponent<Animator>();
         sprite = transform.Find("Sprite").gameObject;
+        rockets = transform.Find("Rockets").gameObject;
 
         backCollision = transform.Find("BackCollider").GetComponent<PlayerCollisionSide>();
         frontCollision = transform.Find("FrontCollider").GetComponent<PlayerCollisionSide>();
@@ -47,11 +51,15 @@ public class PlayerPlatformerController : PhysicsObject {
 
     protected override void ComputeVelocity()
     {
+        if (isDead) return;
+
         Vector2 move = Vector2.zero;
 
         move.x = Input.GetAxis ("Horizontal");
 
         animator.SetBool("isIddle", velocity == Vector2.zero);
+
+        rockets.SetActive(isHover);
 
 	    if(velocity.y == 0.0f && isHover)
         {
@@ -155,11 +163,18 @@ public class PlayerPlatformerController : PhysicsObject {
         } else if (collision.gameObject.tag == "Deadly")
         {
             var allChips = FindObjectsOfType<ChipController>();
-            foreach (var chip in allChips)
-            {
-                if (chip.Type == state.LastChip) { transform.position = chip.transform.position; }
-            }
+            StartCoroutine(Die());
         }
+    }
+
+    IEnumerator Die ()
+    {
+        isDead = true;
+        animator.SetBool("isDead", true);
+        yield return new WaitForSeconds(1);
+        isDead = false;
+        animator.SetBool("isDead", false);
+        transform.position = state.LastChip;
     }
 
     private void OnCollisionExit2D(Collision2D collision)

@@ -33,7 +33,7 @@ public class ChipController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" && !state.HasChip(type))
         {
-            state.AddChip(type);
+            state.AddChip(type, transform.position);
         }
     }
 }
