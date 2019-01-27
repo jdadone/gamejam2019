@@ -13,11 +13,14 @@ public class ChipController : MonoBehaviour
 
     private State state;
 
+    private AudioSource grabSource;
+
     // Start is called before the first frame update
     void Start()
     {
         state = FindObjectOfType<State>();
         sRenderer = GetComponentInChildren<SpriteRenderer>();
+        grabSource = this.gameObject.transform.GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -33,7 +36,13 @@ public class ChipController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" && !state.HasChip(type))
         {
+            PlayGrabSound();
             state.AddChip(type);
         }
+    }
+
+    private void PlayGrabSound()
+    {
+        grabSource.Play();
     }
 }

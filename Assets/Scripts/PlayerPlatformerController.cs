@@ -28,6 +28,21 @@ public class PlayerPlatformerController : PhysicsObject {
     private Quaternion rotation;
     private float rotationStart;
 
+    public AudioClip[] soundList;
+
+    public GameObject musicObject;
+    private AudioSource musicSource;
+
+    public GameObject walkSoundObject;
+    private AudioSource walkAudioSource;
+    private bool isWalking;
+
+    public GameObject jumpSoundObject;
+    private AudioSource jumpAudioSource;
+
+    public GameObject fallSoundObject;
+    private AudioSource fallAudioSource;
+    
     // private SpriteRenderer spriteRenderer;
     // private Animator animator;
 
@@ -41,12 +56,26 @@ public class PlayerPlatformerController : PhysicsObject {
 
         backCollision = transform.Find("BackCollider").GetComponent<PlayerCollisionSide>();
         frontCollision = transform.Find("FrontCollider").GetComponent<PlayerCollisionSide>();
+
+        musicSource = musicObject.transform.GetComponent<AudioSource>();
+        walkAudioSource = walkSoundObject.transform.GetComponent<AudioSource>();
+        jumpAudioSource = jumpSoundObject.transform.GetComponent<AudioSource>();
+        fallAudioSource = fallSoundObject.transform.GetComponent<AudioSource>();
+
         // spriteRenderer = GetComponent<SpriteRenderer> (); 
         // animator = GetComponent<Animator> ();
+        PlayMusic();
+    }
+
+    protected override void PlayFallSound()
+    {
+    	fallAudioSource.clip = soundList[3];
+		fallAudioSource.Play();
     }
 
     protected override void ComputeVelocity()
     {
+
         Vector2 move = Vector2.zero;
 
         move.x = Input.GetAxis ("Horizontal");
@@ -103,6 +132,7 @@ public class PlayerPlatformerController : PhysicsObject {
             if (Input.GetButtonDown("Jump") && grounded)
             {
                 velocity.y = jumpTakeOffSpeed;
+                PlayJumpSound();
                 // animator.SetBool("jump", true);
             }
             else if (Input.GetButtonUp("Jump"))
@@ -137,6 +167,15 @@ public class PlayerPlatformerController : PhysicsObject {
         animator.SetFloat ("velocityX", Mathf.Abs (velocity.x) / maxSpeed);
         */
 
+        if(velocity.y == 0 && Input.GetAxis("Horizontal") !=0 && !isClimbing)
+    	{
+    		PlayWalkSound();
+    	}
+    	else if(Input.GetAxis("Horizontal") == 0 || velocity.y != 0 || isClimbing)
+    	{
+    		StopWalkSound();
+    	}
+
         if (isClimbing)
         {
             targetVelocity = Vector2.zero;
@@ -145,6 +184,7 @@ public class PlayerPlatformerController : PhysicsObject {
         {
             targetVelocity = move * maxSpeed;
         }
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -193,4 +233,36 @@ public class PlayerPlatformerController : PhysicsObject {
         }
     }
 
+	private void PlayMusic()
+    {
+    	musicSource.clip = soundList[0];
+		musicSource.Play();
+    }
+
+    private void StopMusic()
+    {
+		musicSource.Stop();
+    }
+
+    private void PlayWalkSound()
+    {
+    	if(!isWalking)
+    	{
+    		isWalking = true;
+    		walkAudioSource.clip = soundList[1];
+			walkAudioSource.Play();
+    	}
+    }
+
+    private void StopWalkSound()
+    {
+    	isWalking = false;
+		walkAudioSource.Stop();
+    }
+
+	private void PlayJumpSound()
+    {
+    	jumpAudioSource.clip = soundList[2];
+		jumpAudioSource.Play();
+    }
 }
