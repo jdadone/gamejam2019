@@ -13,6 +13,7 @@ public class ChipController : MonoBehaviour
 
     private State state;
     public GameObject newbiesTutorials;
+    private float newbiesTutorialTime;
     private SpriteRenderer newbiesRender;
 
     private AudioSource grabSource;
@@ -37,7 +38,7 @@ public class ChipController : MonoBehaviour
             transform.localScale = Vector3.zero;
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape) && newbiesRender.enabled)
+        if(Input.anyKeyDown && (Time.time > (newbiesTutorialTime + 1f)) && newbiesRender.enabled)
         {
             newbiesRender.enabled = false;
             state.paused = false;
@@ -52,6 +53,7 @@ public class ChipController : MonoBehaviour
             collision.transform.position = transform.position;
             newbiesRender.enabled = true;
             state.paused = true;
+            newbiesTutorialTime = Time.time;
             PlayGrabSound();
             state.AddChip(type, transform.position);
         }

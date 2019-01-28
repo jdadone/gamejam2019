@@ -19,7 +19,7 @@ public class CanvasPortada : MonoBehaviour
 
     public void StartGame()
     {
-    	SceneManager.LoadScene(1);
+    	SceneManager.LoadScene(3);
     }
 
     public void ExitGame()
@@ -29,6 +29,6 @@ public class CanvasPortada : MonoBehaviour
 
     public void ShowCredits()
     {
-    	SceneManager.LoadScene(3);
+    	SceneManager.LoadScene(2);
     }
 }
